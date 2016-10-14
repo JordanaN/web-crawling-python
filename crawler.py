@@ -1,15 +1,17 @@
 from bs4 import BeautifulSoup
 import requests
 
-url = input('Digite a URL do site a ser analisado: ')
-
-if url is None or url == '':
-    url = 'http://tableless.com.br'
+url = 'https://github.com/showcases/programming-languages'
 
 r = requests.get(url)
 soup = BeautifulSoup(r.text, 'html.parser')
 
-print('\nVocê está executando uma crawler na página do "' + soup.title.string + '"!\n')
+print('\nVoce esta executando uma crawler na pagina do "' + soup.title.string + '"!\n')
+
+link = soup.find_all("span", class_="prefix")
+
+print(link)
+
 
 element_search = input('Digite a tag a ser procurada (e.g.: body, div, p): ')
 
@@ -21,4 +23,4 @@ if len(elements) > 0:
     for element in elements:
         print(element)
 else:
-    print('\nTag não encontrada na página!')
+    print('\nTag nao encontrada na pagina!')
