@@ -14,7 +14,7 @@ url = 'https://github.com/showcases/programming-languages'
 r = requests.get(url)
 soup = BeautifulSoup(r.text, 'html.parser')
 
-items = soup.find_all("li", class_="repo-list-item")
+items = soup.find_all('li', class_='repo-list-item')
 
 components = []
 
@@ -23,7 +23,7 @@ for item in items:
     info = list(filter(None, [i.strip() for i in info]))
 
     if len(info) == 2:
-        language = None
+        language = ''.join(list(filter(None, [x.strip() for x in item.h3.text.split('\n')])))
     else:
         language = info[0]
 
