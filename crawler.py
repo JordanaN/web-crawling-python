@@ -1,26 +1,33 @@
 from bs4 import BeautifulSoup
 import requests
 
+
+class Item(object):
+    def __init__(self, language, stars, forks):
+        self.language = language
+        self.stars = stars
+        self.forks = forks
+
+
 url = 'https://github.com/showcases/programming-languages'
 
 r = requests.get(url)
 soup = BeautifulSoup(r.text, 'html.parser')
 
-print('\nVoce esta executando uma crawler na pagina do "' + soup.title.string + '"!\n')
+items = soup.find_all("li", class_="repo-list-item")
 
-link = soup.find_all("span", class_="prefix")
+components = []
 
-print(link)
+for item in items:
+    info = list(filter(None, item.div.get_text().split('\n')))
+    info = list(filter(None, [i.strip() for i in info]))
 
+    if len(info) == 2:
+        language = None
+    else:
+        language = info[0]
 
-element_search = input('Digite a tag a ser procurada (e.g.: body, div, p): ')
+    stars = int(info[0 if len(info) == 2 else 1].replace(',', ''))
+    forks = int(info[1 if len(info) == 2 else 2].replace(',', ''))
 
-elements = [ element.text for element in soup.findAll(element_search) ]
-
-if len(elements) > 0:
-    print('\nElementos com a tag "' + element_search + '"...')
-
-    for element in elements:
-        print(element)
-else:
-    print('\nTag nao encontrada na pagina!')
+    components.append(Item(language, stars, forks))
